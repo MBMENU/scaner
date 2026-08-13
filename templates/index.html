@@ -1,1 +1,1807 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Secret · anticheat.ac</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
 
+        body {
+            background: #0b0d14;
+            color: #e8edf5;
+            min-height: 100vh;
+            display: flex;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 240px;
+            background: #0f121c;
+            padding: 30px 20px;
+            border-right: 1px solid rgba(255, 255, 255, 0.04);
+            min-height: 100vh;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+            flex-shrink: 0;
+        }
+
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 40px;
+            padding-left: 4px;
+        }
+
+        .sidebar-logo .icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #0088ff, #0055cc);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 16px;
+        }
+
+        .sidebar-logo h1 {
+            font-size: 18px;
+            font-weight: 700;
+            background: linear-gradient(to right, #6db8ff, #ffffff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.3px;
+        }
+
+        .sidebar-logo h1 span {
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.2);
+            background: none;
+            -webkit-background-clip: unset;
+            background-clip: unset;
+        }
+
+        .sidebar-section {
+            margin-bottom: 30px;
+        }
+
+        .sidebar-section .title {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: rgba(255, 255, 255, 0.15);
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            color: rgba(255, 255, 255, 0.4);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            margin-bottom: 2px;
+            border: none;
+            background: transparent;
+            width: 100%;
+            text-align: left;
+        }
+
+        .sidebar-item:hover {
+            background: rgba(255, 255, 255, 0.04);
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .sidebar-item.active {
+            background: rgba(0, 136, 255, 0.08);
+            color: #6db8ff;
+        }
+
+        .sidebar-item i {
+            width: 18px;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .sidebar-item .badge {
+            margin-left: auto;
+            background: rgba(0, 136, 255, 0.15);
+            color: #6db8ff;
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 30px 40px 40px 40px;
+            max-width: calc(100% - 240px);
+            min-width: 0;
+        }
+
+        /* Top Bar */
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .topbar-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .topbar-left .breadcrumb {
+            color: rgba(255, 255, 255, 0.2);
+            font-size: 13px;
+        }
+
+        .topbar-left .breadcrumb span {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .topbar-left h2 {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .topbar-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .topbar-right .user {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 14px;
+        }
+
+        .topbar-right .user .avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #0088ff, #0055cc);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .topbar-right .icon-btn {
+            background: transparent;
+            border: none;
+            color: rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            font-size: 18px;
+            transition: color 0.2s;
+        }
+
+        .topbar-right .icon-btn:hover {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Pages - hide by default */
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* Dashboard */
+        .dashboard-header {
+            margin-bottom: 30px;
+        }
+
+        .dashboard-header h3 {
+            font-size: 14px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.3);
+            margin-bottom: 6px;
+        }
+
+        .dashboard-header p {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 14px;
+        }
+
+        .dashboard-header p strong {
+            color: #e8edf5;
+            font-weight: 500;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 12px;
+            padding: 18px 20px;
+        }
+
+        .stat-card .label {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.2);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+
+        .stat-card .value {
+            font-size: 28px;
+            font-weight: 700;
+            margin-top: 4px;
+            color: #e8edf5;
+        }
+
+        .two-col {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+            margin-bottom: 30px;
+        }
+
+        .panel {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 12px;
+            padding: 20px 24px;
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .panel-header h4 {
+            font-size: 14px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .panel-header .link {
+            color: #6db8ff;
+            font-size: 13px;
+            text-decoration: none;
+        }
+
+        .panel-empty {
+            text-align: center;
+            padding: 40px 20px;
+            color: rgba(255, 255, 255, 0.15);
+        }
+
+        .panel-empty .icon {
+            font-size: 36px;
+            margin-bottom: 12px;
+            opacity: 0.3;
+        }
+
+        .panel-empty p {
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .panel-empty .sub {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.08);
+        }
+
+        .announcement-item {
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .announcement-item:last-child {
+            border-bottom: none;
+        }
+
+        .announcement-item .title {
+            font-size: 14px;
+            font-weight: 500;
+            color: #e8edf5;
+        }
+
+        .announcement-item .meta {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.2);
+            margin-top: 4px;
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .announcement-item .meta .tag {
+            background: rgba(0, 200, 100, 0.1);
+            color: #00ff88;
+            padding: 1px 10px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .announcement-item .meta .tag.giveaway {
+            background: rgba(255, 200, 0, 0.1);
+            color: #ffd700;
+        }
+
+        /* PINS Page */
+        .pins-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .pins-header h3 {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.3);
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #0088ff, #0055cc);
+            border: none;
+            padding: 8px 20px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 500;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 20px rgba(0, 100, 255, 0.3);
+        }
+
+        .pins-tabs {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .pins-tabs .tab {
+            color: rgba(255, 255, 255, 0.2);
+            font-size: 14px;
+            cursor: pointer;
+            padding-bottom: 8px;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+            background: none;
+            border-top: none;
+            border-left: none;
+            border-right: none;
+        }
+
+        .pins-tabs .tab.active {
+            color: #e8edf5;
+            border-bottom-color: #0088ff;
+        }
+
+        .pins-stats {
+            display: flex;
+            gap: 24px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .pins-stats .stat {
+            display: flex;
+            align-items: baseline;
+            gap: 6px;
+        }
+
+        .pins-stats .stat .number {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .pins-stats .stat .label {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.2);
+        }
+
+        .pins-stats .stat .label.pending {
+            color: #ffaa44;
+        }
+        .pins-stats .stat .label.finished {
+            color: #00ff88;
+        }
+        .pins-stats .stat .label.expired {
+            color: rgba(255, 255, 255, 0.15);
+        }
+
+        .search-bar {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .search-bar input {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 8px;
+            padding: 10px 16px;
+            color: #e8edf5;
+            font-size: 13px;
+            outline: none;
+            min-width: 180px;
+        }
+
+        .search-bar input::placeholder {
+            color: rgba(255, 255, 255, 0.1);
+        }
+
+        .search-bar select {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 8px;
+            padding: 10px 16px;
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 13px;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .search-bar select option {
+            background: #0f121c;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        .table th {
+            text-align: left;
+            padding: 12px 10px;
+            color: rgba(255, 255, 255, 0.15);
+            font-weight: 500;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .table td {
+            padding: 12px 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .table .empty-row td {
+            text-align: center;
+            padding: 40px 10px;
+            color: rgba(255, 255, 255, 0.08);
+            font-size: 14px;
+        }
+
+        .table tbody tr:not(.empty-row) td {
+            color: #c0d0e8;
+        }
+
+        .table tbody tr:not(.empty-row) td .pin-code {
+            font-family: 'Courier New', monospace;
+            font-weight: 600;
+            color: #6db8ff;
+            letter-spacing: 1px;
+        }
+
+        .table tbody tr td .game-tag {
+            display: inline-block;
+            background: rgba(0, 136, 255, 0.08);
+            color: #6db8ff;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .table tbody tr td .game-tag.minecraft {
+            background: rgba(0, 200, 100, 0.1);
+            color: #00ff88;
+        }
+
+        .status-badge {
+            font-size: 11px;
+            padding: 3px 12px;
+            border-radius: 12px;
+            font-weight: 500;
+            display: inline-block;
+        }
+
+        .status-badge.pending {
+            background: rgba(255, 170, 68, 0.1);
+            color: #ffaa44;
+        }
+
+        .status-badge.finished {
+            background: rgba(0, 255, 136, 0.08);
+            color: #00ff88;
+        }
+
+        .status-badge.expired {
+            background: rgba(255, 255, 255, 0.03);
+            color: rgba(255, 255, 255, 0.15);
+        }
+
+        .visibility-badge {
+            font-size: 11px;
+            padding: 2px 10px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            color: rgba(255, 255, 255, 0.15);
+        }
+
+        .action-btn {
+            background: transparent;
+            border: none;
+            color: rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            padding: 4px 6px;
+            transition: color 0.2s;
+            font-size: 13px;
+        }
+
+        .action-btn:hover {
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .action-btn.delete-btn:hover {
+            color: #ff4444;
+        }
+
+        .action-btn.scan-btn:hover {
+            color: #00ff88;
+        }
+
+        /* STRINGS Page */
+        .strings-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .string-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 12px;
+            padding: 24px;
+        }
+
+        .string-card h4 {
+            font-size: 14px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.3);
+            margin-bottom: 16px;
+        }
+
+        .upload-area {
+            border: 2px dashed rgba(255, 255, 255, 0.06);
+            border-radius: 12px;
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .upload-area:hover {
+            border-color: rgba(0, 136, 255, 0.2);
+            background: rgba(0, 136, 255, 0.02);
+        }
+
+        .upload-area .icon {
+            font-size: 32px;
+            color: rgba(255, 255, 255, 0.05);
+            margin-bottom: 12px;
+        }
+
+        .upload-area p {
+            color: rgba(255, 255, 255, 0.15);
+            font-size: 14px;
+        }
+
+        .upload-area .sub {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.06);
+            margin-top: 4px;
+        }
+
+        .upload-area .btn-upload {
+            background: rgba(0, 136, 255, 0.1);
+            border: 1px solid rgba(0, 136, 255, 0.15);
+            color: #6db8ff;
+            padding: 8px 24px;
+            border-radius: 8px;
+            margin-top: 16px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .upload-area .btn-upload:hover {
+            background: rgba(0, 136, 255, 0.15);
+        }
+
+        .string-tabs {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+
+        .string-tabs .tab {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.15);
+            cursor: pointer;
+            padding-bottom: 4px;
+            border-bottom: 2px solid transparent;
+            background: none;
+            border-top: none;
+            border-left: none;
+            border-right: none;
+        }
+
+        .string-tabs .tab.active {
+            color: #6db8ff;
+            border-bottom-color: #0088ff;
+        }
+
+        .string-subtabs {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .string-subtabs .tab {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.15);
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+
+        .string-subtabs .tab.active {
+            color: #6db8ff;
+        }
+
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: rgba(0, 136, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 136, 255, 0.2);
+            padding: 16px 24px;
+            border-radius: 12px;
+            color: #e8edf5;
+            font-size: 14px;
+            z-index: 1000;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.4s ease;
+            max-width: 400px;
+            pointer-events: none;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .toast .toast-title {
+            font-weight: 600;
+            color: #6db8ff;
+        }
+
+        .toast .toast-pin {
+            font-family: 'Courier New', monospace;
+            font-size: 18px;
+            font-weight: 700;
+            color: #00ff88;
+            letter-spacing: 2px;
+            margin-top: 4px;
+        }
+
+        .toast .toast-sub {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.2);
+            margin-top: 4px;
+        }
+
+        .toast.delete {
+            background: rgba(255, 50, 50, 0.15);
+            border-color: rgba(255, 50, 50, 0.2);
+        }
+
+        .toast.delete .toast-title {
+            color: #ff6b6b;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal {
+            background: #0f121c;
+            border: 1px solid rgba(64, 160, 255, 0.1);
+            border-radius: 20px;
+            padding: 32px 36px;
+            max-width: 700px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .modal-header h2 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #e8edf5;
+        }
+
+        .modal-header h2 span {
+            color: #6db8ff;
+            font-family: 'Courier New', monospace;
+        }
+
+        .modal-close {
+            background: transparent;
+            border: none;
+            color: rgba(255, 255, 255, 0.2);
+            font-size: 24px;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .modal-close:hover {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .modal-body {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .modal-body .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .modal-body .detail-row .label {
+            color: rgba(255, 255, 255, 0.2);
+        }
+
+        .modal-body .detail-row .value {
+            color: #c0d0e8;
+            font-weight: 500;
+        }
+
+        .modal-body .detail-row .value.highlight {
+            color: #00ff88;
+        }
+
+        .modal-body .detail-row .value.pending-text {
+            color: #ffaa44;
+        }
+
+        .modal-body .detail-row .value.expired-text {
+            color: rgba(255, 255, 255, 0.2);
+        }
+
+        .modal-body .scan-results {
+            margin-top: 20px;
+            padding: 16px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            border: 1px solid rgba(64, 160, 255, 0.05);
+        }
+
+        .modal-body .scan-results h4 {
+            color: rgba(255, 255, 255, 0.2);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+
+        .modal-body .scan-results .result-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 6px 0;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.3);
+        }
+
+        .modal-body .scan-results .result-item .icon {
+            width: 24px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .modal-body .scan-results .result-item .icon.detected {
+            color: #ff4444;
+        }
+
+        .modal-body .scan-results .result-item .icon.clean {
+            color: #00ff88;
+        }
+
+        .modal-body .scan-results .result-item .icon.info {
+            color: #6db8ff;
+        }
+
+        .modal-body .scan-results .result-item .desc {
+            flex: 1;
+        }
+
+        .modal-body .scan-results .result-item .status-text {
+            font-size: 11px;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-weight: 500;
+        }
+
+        .modal-body .scan-results .result-item .status-text.detected {
+            background: rgba(255, 68, 68, 0.1);
+            color: #ff4444;
+        }
+
+        .modal-body .scan-results .result-item .status-text.clean {
+            background: rgba(0, 255, 136, 0.08);
+            color: #00ff88;
+        }
+
+        .modal-body .scan-results .result-item .status-text.warning {
+            background: rgba(255, 170, 68, 0.1);
+            color: #ffaa44;
+        }
+
+        .modal-body .scan-results .result-item .status-text.pending-text {
+            background: rgba(255, 170, 68, 0.08);
+            color: #ffaa44;
+        }
+
+        /* Scrollbar */
+        .modal::-webkit-scrollbar {
+            width: 6px;
+        }
+        .modal::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .modal::-webkit-scrollbar-thumb {
+            background: rgba(64, 160, 255, 0.15);
+            border-radius: 4px;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .two-col {
+                grid-template-columns: 1fr;
+            }
+            .strings-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 60px;
+                padding: 20px 10px;
+            }
+            .sidebar-logo h1,
+            .sidebar-item span,
+            .sidebar-section .title {
+                display: none;
+            }
+            .sidebar-item {
+                justify-content: center;
+                padding: 12px;
+            }
+            .sidebar-item i {
+                font-size: 18px;
+            }
+            .main-content {
+                max-width: 100%;
+                padding: 20px;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .topbar-left .breadcrumb {
+                display: none;
+            }
+            .toast {
+                left: 20px;
+                right: 20px;
+                bottom: 20px;
+                max-width: none;
+            }
+            .modal {
+                padding: 20px;
+            }
+            .modal-body .detail-row {
+                flex-direction: column;
+                gap: 4px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            .topbar-left h2 {
+                font-size: 16px;
+            }
+            .pins-stats {
+                gap: 12px;
+            }
+            .pins-stats .stat .number {
+                font-size: 16px;
+            }
+            .search-bar input {
+                min-width: 100%;
+            }
+            .search-bar select {
+                flex: 1;
+                min-width: 80px;
+            }
+            .table {
+                font-size: 11px;
+            }
+            .table th,
+            .table td {
+                padding: 8px 6px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <nav class="sidebar">
+        <div class="sidebar-logo">
+            <div class="icon"><i class="fas fa-water"></i></div>
+            <h1>Secret<span>.ac</span></h1>
+        </div>
+
+        <div class="sidebar-section">
+            <div class="title">Services</div>
+            <button class="sidebar-item active" data-page="dashboard">
+                <i class="fas fa-th-large"></i>
+                <span>Dashboard</span>
+            </button>
+            <button class="sidebar-item" data-page="pins">
+                <i class="fas fa-thumbtack"></i>
+                <span>Pins</span>
+                <span class="badge" id="pinBadge">0</span>
+            </button>
+            <button class="sidebar-item" data-page="strings">
+                <i class="fas fa-code"></i>
+                <span>Strings</span>
+            </button>
+        </div>
+
+        <div class="sidebar-section">
+            <div class="title">Support</div>
+            <button class="sidebar-item" data-page="support">
+                <i class="fas fa-life-ring"></i>
+                <span>Support</span>
+            </button>
+        </div>
+
+        <div class="sidebar-section">
+            <div class="title">Others</div>
+            <button class="sidebar-item" data-page="resources">
+                <i class="fas fa-box"></i>
+                <span>Resources</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Top Bar -->
+        <div class="topbar">
+            <div class="topbar-left">
+                <div class="breadcrumb" id="breadcrumb">Dashboard</div>
+                <h2 id="pageTitle">Dashboard</h2>
+            </div>
+            <div class="topbar-right">
+                <button class="icon-btn"><i class="fas fa-bell"></i></button>
+                <button class="icon-btn"><i class="fas fa-cog"></i></button>
+                <div class="user">
+                    <div class="avatar">M</div>
+                    <span>magnata_anti_cheater</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============ DASHBOARD PAGE ============ -->
+        <div class="page active" id="page-dashboard">
+            <div class="dashboard-header">
+                <h3>VIEW STATISTICS, EVENTS, AND ANNOUNCEMENTS ON THE Secret.</h3>
+                <p>Welcome back, <strong>magnata_anti_cheater</strong>.</p>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="label">TOTAL PINS</div>
+                    <div class="value" id="totalPins">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">TOTAL SCANS</div>
+                    <div class="value">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">DETECTIONS</div>
+                    <div class="value">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="label">UNIQUE CHEATS</div>
+                    <div class="value">0</div>
+                </div>
+            </div>
+
+            <div class="two-col">
+                <div class="panel">
+                    <div class="panel-header">
+                        <h4>OVERVIEW OF YOUR SCAN ACTIVITY AND DETECTION RESULTS</h4>
+                        <a href="#" class="link">Your Statistics →</a>
+                    </div>
+                    <div class="panel-empty" id="noScanData">
+                        <div class="icon"><i class="fas fa-chart-bar"></i></div>
+                        <p>No scan data yet</p>
+                        <div class="sub">Create your first PIN and run a scan to see your statistics here.</div>
+                    </div>
+                    <div id="scanData" style="display: none;">
+                        <!-- Será preenchido dinamicamente -->
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-header">
+                        <h4>LATEST ANNOUNCEMENTS FROM THE TEAM</h4>
+                        <a href="#" class="link">Announcements →</a>
+                    </div>
+                    <div class="announcement-item">
+                        <div class="title">Secret v2.0 Beta is now available</div>
+                        <div class="meta">
+                            <span>2 hours ago</span>
+                            <span class="tag">Active</span>
+                        </div>
+                    </div>
+                    <div class="announcement-item">
+                        <div class="title">Giveaways: Win a Premium Key!</div>
+                        <div class="meta">
+                            <span>1 day ago</span>
+                            <span class="tag giveaway">Giveaways</span>
+                            <span>Active · Winners</span>
+                        </div>
+                    </div>
+                    <div class="announcement-item">
+                        <div class="title">New detection engine released</div>
+                        <div class="meta">
+                            <span>3 days ago</span>
+                            <span class="tag">Active</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============ PINS PAGE ============ -->
+        <div class="page" id="page-pins">
+            <div class="pins-header">
+                <h3>VIEW AND MANAGE YOUR SCAN PINS AND RESULTS</h3>
+                <button class="btn-primary" id="createPinBtn"><i class="fas fa-plus"></i> Create Pin</button>
+            </div>
+
+            <div class="pins-tabs">
+                <button class="tab active" data-tab="mypins">My Pins</button>
+                <button class="tab" data-tab="shared">Shared with Me</button>
+            </div>
+
+            <div class="pins-stats">
+                <div class="stat">
+                    <span class="number" id="dailyPins">0</span>
+                    <span class="label">DAILY PINS</span>
+                    <span style="color:rgba(255,255,255,0.1);">/1</span>
+                    <span style="color:rgba(255,255,255,0.05);" id="dailyUsed">0</span>
+                </div>
+                <div class="stat">
+                    <span class="number" id="totalPinsStat">0</span>
+                    <span class="label">TOTAL PINS</span>
+                </div>
+                <div class="stat">
+                    <span class="number" id="pendingPins">0</span>
+                    <span class="label pending">PENDING</span>
+                </div>
+                <div class="stat">
+                    <span class="number" id="finishedPins">0</span>
+                    <span class="label finished">FINISHED</span>
+                </div>
+                <div class="stat">
+                    <span class="number" id="expiredPins">0</span>
+                    <span class="label expired">EXPIRED</span>
+                </div>
+            </div>
+
+            <div class="search-bar">
+                <input type="text" placeholder="Search by pin or name..." id="searchInput" />
+                <select id="statusFilter">
+                    <option value="all">All Status</option>
+                    <option value="pending">Pending</option>
+                    <option value="finished">Finished</option>
+                    <option value="expired">Expired</option>
+                </select>
+                <select id="gameFilter">
+                    <option value="all">All Games</option>
+                    <option value="minecraft">Minecraft</option>
+                    <option value="csgo">CS:GO</option>
+                    <option value="valorant">Valorant</option>
+                    <option value="rust">Rust</option>
+                </select>
+                <select>
+                    <option>More</option>
+                </select>
+            </div>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>PIN</th>
+                        <th>NAME</th>
+                        <th>GAME</th>
+                        <th>STATUS</th>
+                        <th>USED</th>
+                        <th>RESULT</th>
+                        <th>VISIBILITY</th>
+                        <th>ACTIONS</th>
+                    </tr>
+                </thead>
+                <tbody id="pinsTableBody">
+                    <tr class="empty-row" id="emptyRow">
+                        <td colspan="8">No results found</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ============ STRINGS PAGE ============ -->
+        <div class="page" id="page-strings">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 12px;">
+                <h3 style="font-size: 14px; color: rgba(255,255,255,0.3); font-weight: 500;">UPLOAD AND ANALYZE FILES FOR STRING DETECTION.</h3>
+                <span style="font-size: 13px; color: rgba(255,255,255,0.1);">magnata_anti_cheater</span>
+            </div>
+
+            <div class="strings-grid">
+                <div class="string-card">
+                    <h4>String Analysis</h4>
+                    <div class="string-tabs">
+                        <button class="tab active">String Extractor</button>
+                        <button class="tab">Presence Detection</button>
+                        <button class="tab">Suspicious Detection</button>
+                    </div>
+                    <div class="string-subtabs">
+                        <button class="tab active">Upload</button>
+                        <button class="tab">Results</button>
+                    </div>
+                    <h4 style="font-size: 13px; color: rgba(255,255,255,0.2); margin-bottom: 12px;">EXTRACTOR</h4>
+                    <div class="upload-area" id="uploadArea">
+                        <div class="icon"><i class="fas fa-cloud-upload-alt"></i></div>
+                        <p>Upload File</p>
+                        <div class="sub">Drag and drop or click</div>
+                        <div class="sub" style="margin-bottom: 12px;">Supported: .exe, .jar, .dll, .sys</div>
+                        <button class="btn-upload" id="analyzeBtn">Analyze File</button>
+                    </div>
+                </div>
+
+                <div class="string-card" id="resultsCard" style="display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 200px; color: rgba(255,255,255,0.05);">
+                    <i class="fas fa-file-code" style="font-size: 48px; margin-bottom: 12px; opacity: 0.2;"></i>
+                    <p style="font-size: 14px;">Results will appear here</p>
+                    <p style="font-size: 12px; color: rgba(255,255,255,0.03);">Upload a file to start analysis</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============ SUPPORT PAGE (placeholder) ============ -->
+        <div class="page" id="page-support">
+            <div class="panel" style="padding: 40px; text-align: center;">
+                <i class="fas fa-life-ring" style="font-size: 48px; color: rgba(255,255,255,0.05); margin-bottom: 16px;"></i>
+                <h3 style="color: rgba(255,255,255,0.2); font-weight: 400;">Support Center</h3>
+                <p style="color: rgba(255,255,255,0.05); margin-top: 8px;">Contact our team for assistance</p>
+            </div>
+        </div>
+
+        <!-- ============ RESOURCES PAGE (placeholder) ============ -->
+        <div class="page" id="page-resources">
+            <div class="panel" style="padding: 40px; text-align: center;">
+                <i class="fas fa-box" style="font-size: 48px; color: rgba(255,255,255,0.05); margin-bottom: 16px;"></i>
+                <h3 style="color: rgba(255,255,255,0.2); font-weight: 400;">Resources</h3>
+                <p style="color: rgba(255,255,255,0.05); margin-top: 8px;">Documentation and guides</p>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.03); text-align: center; font-size: 12px; color: rgba(255,255,255,0.05);">
+            Secret · anticheat.ac
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <div class="toast-title"><i class="fas fa-check-circle" style="color: #00ff88;"></i> PIN Criado com Sucesso!</div>
+        <div class="toast-pin" id="toastPin">ABCD1234</div>
+        <div class="toast-sub" id="toastSub">Jogo: Minecraft</div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Detalhes do Scanner · <span id="modalPin">ABCD1234</span></h2>
+                <button class="modal-close" id="modalClose"><i class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Preenchido dinamicamente -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- State ---
+            let pins = [];
+            let pinCounter = 0;
+
+            // --- DOM refs ---
+            const pinsTableBody = document.getElementById('pinsTableBody');
+            const totalPinsEl = document.getElementById('totalPins');
+            const totalPinsStat = document.getElementById('totalPinsStat');
+            const pendingPins = document.getElementById('pendingPins');
+            const finishedPins = document.getElementById('finishedPins');
+            const expiredPins = document.getElementById('expiredPins');
+            const dailyPins = document.getElementById('dailyPins');
+            const dailyUsed = document.getElementById('dailyUsed');
+            const pinBadge = document.getElementById('pinBadge');
+            const toast = document.getElementById('toast');
+            const toastPin = document.getElementById('toastPin');
+            const toastSub = document.getElementById('toastSub');
+            const searchInput = document.getElementById('searchInput');
+            const statusFilter = document.getElementById('statusFilter');
+            const gameFilter = document.getElementById('gameFilter');
+            const modalOverlay = document.getElementById('modalOverlay');
+            const modalPin = document.getElementById('modalPin');
+            const modalBody = document.getElementById('modalBody');
+            const modalClose = document.getElementById('modalClose');
+
+            // --- Functions ---
+            function generatePin() {
+                const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+                let pin = '';
+                for (let i = 0; i < 8; i++) {
+                    pin += chars.charAt(Math.floor(Math.random() * chars.length));
+                }
+                return pin;
+            }
+
+            function getRandomDate() {
+                const now = new Date();
+                const daysAgo = Math.floor(Math.random() * 30);
+                now.setDate(now.getDate() - daysAgo);
+                return now.toLocaleDateString('pt-BR');
+            }
+
+            function generateScanResults() {
+                const cheats = [
+                    { name: 'X-Ray Vision', detected: Math.random() > 0.3 },
+                    { name: 'Auto-Aim', detected: Math.random() > 0.4 },
+                    { name: 'ESP (Wallhack)', detected: Math.random() > 0.2 },
+                    { name: 'Speed Hack', detected: Math.random() > 0.6 },
+                    { name: 'Fly Hack', detected: Math.random() > 0.7 },
+                    { name: 'No Fall Damage', detected: Math.random() > 0.5 },
+                    { name: 'Infinite Resources', detected: Math.random() > 0.4 },
+                    { name: 'Kill Aura', detected: Math.random() > 0.6 },
+                    { name: 'Reach Hack', detected: Math.random() > 0.7 },
+                    { name: 'Jesus Christ (Water Walk)', detected: Math.random() > 0.8 }
+                ];
+                return cheats.filter(c => c.detected);
+            }
+
+            function createPinEntry(pinCode) {
+                const visibility = ['Público', 'Privado', 'Compartilhado'][Math.floor(Math.random() * 3)];
+                return {
+                    pin: pinCode,
+                    name: `Scan #${String(++pinCounter).padStart(3, '0')}`,
+                    game: 'Minecraft',
+                    status: 'pending', // Sempre pending quando criado
+                    used: 0,
+                    result: 'Aguardando scan...',
+                    visibility: visibility,
+                    date: getRandomDate(),
+                    scanResults: null,
+                    isScanned: false
+                };
+            }
+
+            function performScan(pinData) {
+                // Simula o scanner rodando com delay
+                const results = generateScanResults();
+                pinData.scanResults = results;
+                pinData.isScanned = true;
+                pinData.status = results.length > 0 ? 'finished' : 'finished';
+                pinData.used = 1;
+                pinData.result = results.length > 0 ? `${results.length} detecções` : 'Limpo';
+                return results;
+            }
+
+            function renderPins(filteredPins) {
+                const list = filteredPins || pins;
+                const tbody = pinsTableBody;
+                tbody.innerHTML = '';
+
+                if (list.length === 0) {
+                    tbody.innerHTML = `
+                        <tr class="empty-row">
+                            <td colspan="8">No results found</td>
+                        </tr>
+                    `;
+                    return;
+                }
+
+                list.forEach((p, index) => {
+                    const statusClass = p.status;
+                    const statusLabel = p.status.charAt(0).toUpperCase() + p.status.slice(1);
+                    const tr = document.createElement('tr');
+                    tr.setAttribute('data-index', index);
+                    tr.innerHTML = `
+                        <td><span class="pin-code">${p.pin}</span></td>
+                        <td>${p.name}</td>
+                        <td><span class="game-tag minecraft">${p.game}</span></td>
+                        <td><span class="status-badge ${statusClass}">${statusLabel}</span></td>
+                        <td>${p.used}</td>
+                        <td>${p.result}</td>
+                        <td><span class="visibility-badge">${p.visibility}</span></td>
+                        <td>
+                            <button class="action-btn" title="Copiar PIN" data-action="copy"><i class="fas fa-copy"></i></button>
+                            <button class="action-btn scan-btn" title="${p.isScanned ? 'Ver resultados' : 'Escaneiar PIN'}" data-action="scan"><i class="fas fa-${p.isScanned ? 'eye' : 'play'}"></i></button>
+                            <button class="action-btn delete-btn" title="Deletar" data-action="delete"><i class="fas fa-trash"></i></button>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+
+                // --- Event listeners para actions ---
+                tbody.querySelectorAll('[data-action="copy"]').forEach((btn, idx) => {
+                    btn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        const pin = list[idx].pin;
+                        navigator.clipboard.writeText(pin).then(() => {
+                            showToast('PIN copiado!', pin, 'Copiado para a área de transferência');
+                        }).catch(() => {
+                            const textarea = document.createElement('textarea');
+                            textarea.value = pin;
+                            document.body.appendChild(textarea);
+                            textarea.select();
+                            document.execCommand('copy');
+                            document.body.removeChild(textarea);
+                            showToast('PIN copiado!', pin, 'Copiado para a área de transferência');
+                        });
+                    });
+                });
+
+                tbody.querySelectorAll('[data-action="delete"]').forEach((btn, idx) => {
+                    btn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        const pinToDelete = list[idx];
+                        if (confirm(`Tem certeza que deseja deletar o PIN ${pinToDelete.pin}?`)) {
+                            // Remove do array principal
+                            const mainIndex = pins.findIndex(p => p.pin === pinToDelete.pin && p.name === pinToDelete.name);
+                            if (mainIndex !== -1) {
+                                pins.splice(mainIndex, 1);
+                            }
+                            renderPins();
+                            updateStats();
+                            showToast('PIN deletado!', pinToDelete.pin, 'O PIN foi removido com sucesso', true);
+                        }
+                    });
+                });
+
+                tbody.querySelectorAll('[data-action="scan"]').forEach((btn, idx) => {
+                    btn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        const p = list[idx];
+                        if (!p.isScanned) {
+                            // Primeiro scan - executa o scanner com delay para simular
+                            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                            btn.disabled = true;
+                            btn.style.opacity = '0.5';
+
+                            setTimeout(() => {
+                                const results = performScan(p);
+                                renderPins();
+                                updateStats();
+                                showToast('Scan concluído!', p.pin, `${results.length} detecções encontradas`);
+                                // Abre o modal com os resultados
+                                openModal(p);
+                            }, 1500);
+                        } else {
+                            // Já escaneado - mostra resultados
+                            openModal(p);
+                        }
+                    });
+                });
+            }
+
+            function openModal(pinData) {
+                modalPin.textContent = pinData.pin;
+
+                const statusColors = {
+                    'pending': 'pending-text',
+                    'finished': 'highlight',
+                    'expired': 'expired-text'
+                };
+
+                let scanResultsHtml;
+                if (!pinData.isScanned || pinData.status === 'pending') {
+                    scanResultsHtml = `
+                        <div class="result-item">
+                            <span class="icon info"><i class="fas fa-clock"></i></span>
+                            <span class="desc">Aguardando escaneamento...</span>
+                            <span class="status-text pending-text">Pendente</span>
+                        </div>
+                        <div style="margin-top: 12px; padding: 12px; background: rgba(255,170,68,0.05); border-radius: 8px; border: 1px solid rgba(255,170,68,0.1); text-align: center; color: rgba(255,255,255,0.2); font-size: 13px;">
+                            <i class="fas fa-info-circle" style="color: #ffaa44;"></i>
+                            Clique no botão <strong style="color: #ffaa44;">▶ Escaneiar</strong> na lista para executar o scanner neste PIN.
+                        </div>
+                    `;
+                } else if (pinData.scanResults && pinData.scanResults.length > 0) {
+                    scanResultsHtml = pinData.scanResults.map(r => `
+                        <div class="result-item">
+                            <span class="icon detected"><i class="fas fa-exclamation-triangle"></i></span>
+                            <span class="desc">${r.name}</span>
+                            <span class="status-text detected">Detectado</span>
+                        </div>
+                    `).join('');
+                } else {
+                    scanResultsHtml = `
+                        <div class="result-item">
+                            <span class="icon clean"><i class="fas fa-check-circle"></i></span>
+                            <span class="desc">Nenhuma cheat detectada</span>
+                            <span class="status-text clean">Limpo</span>
+                        </div>
+                    `;
+                }
+
+                modalBody.innerHTML = `
+                    <div class="detail-row">
+                        <span class="label">PIN</span>
+                        <span class="value highlight">${pinData.pin}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="label">Nome</span>
+                        <span class="value">${pinData.name}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="label">Jogo</span>
+                        <span class="value">${pinData.game}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="label">Status</span>
+                        <span class="value ${statusColors[pinData.status] || ''}">${pinData.status.charAt(0).toUpperCase() + pinData.status.slice(1)}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="label">Usado</span>
+                        <span class="value">${pinData.used} vezes</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="label">Visibilidade</span>
+                        <span class="value">${pinData.visibility}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="label">Data de criação</span>
+                        <span class="value">${pinData.date}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span class="label">Resultado</span>
+                        <span class="value ${pinData.isScanned && pinData.result !== 'Aguardando scan...' && pinData.result !== 'Limpo' ? 'highlight' : ''}">${pinData.result}</span>
+                    </div>
+
+                    <div class="scan-results">
+                        <h4><i class="fas fa-shield-alt" style="margin-right: 8px;"></i>Resultados do Scanner</h4>
+                        ${scanResultsHtml}
+                        ${pinData.isScanned ? `<div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.03); font-size: 11px; color: rgba(255,255,255,0.08);">Scan realizado em ${new Date().toLocaleString()}</div>` : ''}
+                    </div>
+                `;
+
+                modalOverlay.classList.add('show');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closeModal() {
+                modalOverlay.classList.remove('show');
+                document.body.style.overflow = '';
+            }
+
+            function updateStats() {
+                const total = pins.length;
+                const pending = pins.filter(p => p.status === 'pending').length;
+                const finished = pins.filter(p => p.status === 'finished').length;
+                const expired = pins.filter(p => p.status === 'expired').length;
+
+                totalPinsEl.textContent = total;
+                totalPinsStat.textContent = total;
+                pendingPins.textContent = pending;
+                finishedPins.textContent = finished;
+                expiredPins.textContent = expired;
+                dailyPins.textContent = Math.min(total, 1);
+                dailyUsed.textContent = total;
+                pinBadge.textContent = total;
+
+                // Update dashboard scan data
+                const noScanData = document.getElementById('noScanData');
+                const scanData = document.getElementById('scanData');
+                if (total > 0) {
+                    noScanData.style.display = 'none';
+                    scanData.style.display = 'block';
+                    const scanned = pins.filter(p => p.isScanned).length;
+                    scanData.innerHTML = `
+                        <div style="padding: 10px 0; color: rgba(255,255,255,0.3);">
+                            <p style="font-size: 14px; color: #6db8ff;">${total} pins criados</p>
+                            <p style="font-size: 12px; color: rgba(255,255,255,0.15);">${scanned} scans realizados · ${pending} pendentes</p>
+                            <div style="margin-top: 12px; height: 4px; background: rgba(255,255,255,0.03); border-radius: 4px; overflow: hidden;">
+                                <div style="height: 100%; width: ${total > 0 ? Math.round((scanned/total)*100) : 0}%; background: linear-gradient(to right, #0088ff, #00ff88); border-radius: 4px;"></div>
+                            </div>
+                            <p style="font-size: 11px; color: rgba(255,255,255,0.05); margin-top: 8px;">Todos os pins são para Minecraft</p>
+                        </div>
+                    `;
+                } else {
+                    noScanData.style.display = 'block';
+                    scanData.style.display = 'none';
+                }
+            }
+
+            function filterPins() {
+                const search = searchInput.value.toLowerCase();
+                const status = statusFilter.value;
+                const game = gameFilter.value;
+
+                let filtered = pins;
+
+                if (search) {
+                    filtered = filtered.filter(p =>
+                        p.pin.toLowerCase().includes(search) ||
+                        p.name.toLowerCase().includes(search)
+                    );
+                }
+
+                if (status !== 'all') {
+                    filtered = filtered.filter(p => p.status === status);
+                }
+
+                if (game !== 'all') {
+                    filtered = filtered.filter(p => p.game.toLowerCase() === game.toLowerCase());
+                }
+
+                renderPins(filtered);
+            }
+
+            function showToast(message, pin, sub, isDelete = false) {
+                toastPin.textContent = pin || 'ABCD1234';
+                toastSub.textContent = sub || 'Jogo: Minecraft';
+                toast.className = 'toast';
+                if (isDelete) {
+                    toast.classList.add('delete');
+                    toast.querySelector('.toast-title').innerHTML = `<i class="fas fa-trash" style="color: #ff6b6b;"></i> ${message}`;
+                } else {
+                    toast.querySelector('.toast-title').innerHTML = `<i class="fas fa-check-circle" style="color: #00ff88;"></i> ${message}`;
+                }
+                toast.classList.add('show');
+                clearTimeout(toast._timer);
+                toast._timer = setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 4000);
+            }
+
+            // --- Create PIN (sempre Minecraft, sem detecções) ---
+            document.getElementById('createPinBtn').addEventListener('click', function() {
+                const newPin = generatePin();
+                const entry = createPinEntry(newPin);
+                pins.push(entry);
+                renderPins();
+                updateStats();
+                showToast('PIN Criado com Sucesso!', newPin, 'Jogo: Minecraft · Aguardando scan');
+            });
+
+            // --- Search / Filter ---
+            searchInput.addEventListener('input', filterPins);
+            statusFilter.addEventListener('change', filterPins);
+            gameFilter.addEventListener('change', filterPins);
+
+            // --- Pins tabs ---
+            document.querySelectorAll('.pins-tabs .tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    document.querySelectorAll('.pins-tabs .tab').forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    filterPins();
+                });
+            });
+
+            // --- Modal events ---
+            modalClose.addEventListener('click', closeModal);
+            modalOverlay.addEventListener('click', function(e) {
+                if (e.target === this) closeModal();
+            });
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') closeModal();
+            });
+
+            // --- String tabs (visual) ---
+            document.querySelectorAll('.string-tabs .tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    document.querySelectorAll('.string-tabs .tab').forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+
+            document.querySelectorAll('.string-subtabs .tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    document.querySelectorAll('.string-subtabs .tab').forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+
+            // --- Upload area ---
+            document.getElementById('uploadArea').addEventListener('click', function() {
+                alert('File upload dialog would open here.\nSupported: .exe, .jar, .dll, .sys');
+            });
+
+            document.getElementById('analyzeBtn').addEventListener('click', function(e) {
+                e.stopPropagation();
+                const resultsCard = document.getElementById('resultsCard');
+                resultsCard.innerHTML = `
+                    <div style="text-align: center; padding: 20px;">
+                        <div style="font-size: 36px; margin-bottom: 12px; opacity: 0.5;"><i class="fas fa-spinner fa-spin"></i></div>
+                        <p style="color: rgba(255,255,255,0.2);">Analisando arquivo...</p>
+                        <p style="font-size: 12px; color: rgba(255,255,255,0.05);">Extraindo strings suspeitas</p>
+                    </div>
+                `;
+                setTimeout(() => {
+                    resultsCard.innerHTML = `
+                        <div style="text-align: center; padding: 20px;">
+                            <div style="font-size: 36px; margin-bottom: 12px; color: #00ff88; opacity: 0.5;"><i class="fas fa-check-circle"></i></div>
+                            <p style="color: rgba(255,255,255,0.2);">Análise concluída!</p>
+                            <p style="font-size: 12px; color: rgba(255,255,255,0.1);">12 strings suspeitas encontradas</p>
+                            <div style="margin-top: 12px; text-align: left; font-size: 11px; color: rgba(255,255,255,0.05); font-family: monospace;">
+                                <div>0x0040A1F2 · "kernel32.dll"</div>
+                                <div>0x0040B3C4 · "CreateRemoteThread"</div>
+                                <div>0x0040D5E8 · "VirtualAllocEx"</div>
+                                <div style="color: rgba(255,255,255,0.02);">+9 mais...</div>
+                            </div>
+                        </div>
+                    `;
+                }, 2500);
+            });
+
+            // --- Sidebar navigation ---
+            const sidebarItems = document.querySelectorAll('.sidebar-item[data-page]');
+            const pages = {
+                dashboard: document.getElementById('page-dashboard'),
+                pins: document.getElementById('page-pins'),
+                strings: document.getElementById('page-strings'),
+                support: document.getElementById('page-support'),
+                resources: document.getElementById('page-resources')
+            };
+            const breadcrumb = document.getElementById('breadcrumb');
+            const pageTitle = document.getElementById('pageTitle');
+            const pageNames = {
+                dashboard: 'Dashboard',
+                pins: 'Pins',
+                strings: 'Strings',
+                support: 'Support',
+                resources: 'Resources'
+            };
+
+            function switchPage(pageId) {
+                Object.values(pages).forEach(p => p.classList.remove('active'));
+                if (pages[pageId]) pages[pageId].classList.add('active');
+                sidebarItems.forEach(item => {
+                    item.classList.remove('active');
+                    if (item.dataset.page === pageId) item.classList.add('active');
+                });
+                breadcrumb.textContent = pageNames[pageId] || pageId;
+                pageTitle.textContent = pageNames[pageId] || pageId;
+            }
+
+            sidebarItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const page = this.dataset.page;
+                    if (page) switchPage(page);
+                });
+            });
+
+            // --- Initial render (sem pins) ---
+            renderPins();
+            updateStats();
+        });
+    </script>
+</body>
+</html>
